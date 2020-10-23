@@ -15,12 +15,40 @@ con difficoltà 2 => tra 1 e 50
 */
 
 
-// Genera --3 num (debug)-- 16 num casuali (bombe) tra 1 e 100   --tra 1 e 10 (debug)---
+
+// BONUS - SCELTA LIVELLI DIFFICOLTA
+var level = parseInt( prompt('Scegli il livello di difficoltà:\n0 \n1 \n2').trim() ) ;
+
+while (isNaN(level) || !(level >= 0 && level <= 2) ) {
+  level = parseInt( prompt('Livello errato! \nScegli il livello di difficoltà:\n0 \n1 \n2').trim() );
+}
+
+var maxRange;
+
+switch (level) {
+  case 0:
+   maxRange = 20;
+    break;
+  case 1:
+   maxRange = 80;
+    break;
+  case 2:
+   maxRange = 50;
+    break;
+  default:
+   maxRange = 100;
+}
+
+
+// Genera  16 num casuali (bombe) tra 1 e 100  
 var listNumBomb = [];
-var sizeListNumBomb = 3;
+var sizeListNumBomb = 16;
+
+var tryUser = maxRange - sizeListNumBomb;
+
 
 while (listNumBomb.length < sizeListNumBomb) {
-  var number = computerRandNumber(1, 10);
+  var number = computerRandNumber(1, maxRange);
 
   if (! listNumBomb.includes(number)) {
     listNumBomb.push(number);
@@ -29,22 +57,24 @@ while (listNumBomb.length < sizeListNumBomb) {
 }
 console.log(listNumBomb);
 
+
+
 // Numeri utente
 var listUserNum = [];
 console.log(listUserNum);
 
-//  Per tenere traccia del punteggio (score = tentativi del giocatore) e se il giocatore vince o perde
+//  Per tenere traccia del punteggio (score = tentativi del giocatore) e se il giocatore vince o perde (loose)
 var loose = false;
 var score = 0;
 
 // Loop finchè il giocatore non ha raggiunto il num max tentativi o perde (bomba, num vietato, se non inserisce num)
-while (listUserNum.length < 10 && !loose) {
+while (listUserNum.length < tryUser && !loose) {
 
-  var userNum = parseInt( prompt('Inserisci un nunero').trim() );
+  var userNum = parseInt( prompt('Inserisci un numero').trim() );
   console.log(userNum);
 
 
-  if (!listUserNum.includes(userNum) && !isNaN(userNum) && (userNum >= 1 && userNum <= 100) ) {
+  if (!listUserNum.includes(userNum) && !isNaN(userNum) && (userNum >= 1 && userNum <= maxRange) ) {
     listUserNum.push(userNum);
     score++;
 
@@ -74,6 +104,17 @@ if (!loose) {
 }
 
 
+
+// Generazione numero random per computer
+function computerRandNumber(min, max) {
+  var random = Math.floor( Math.random() * max - min + 1) + min;
+
+  return random;
+}
+
+
+
+// *************************************************************************************************************************
 // Funzione per verificare presenza di un numero all'interno di un array
 // function checkNum(numb, listNumb) {
 //
@@ -87,10 +128,3 @@ if (!loose) {
 //   return false;
 //
 // }
-
-// Generazione numero random per computer
-function computerRandNumber(min, max) {
-  var random = Math.floor( Math.random() * max - min + 1) + min;
-
-  return random;
-}
